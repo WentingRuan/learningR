@@ -1,0 +1,47 @@
+---
+title: "geom_jitter"
+author: "Ethel Ruan"
+date: "2017-01-20"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#geom_jitter
+`geom_jitter`
+**Points, jittered to reduce overplotting.**
+          
+
+##Usage
+```
+geom_jitter(mapping = NULL, data = NULL, stat = "identity", position = "jitter", ..., width = NULL, height = NULL, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+
+##Description
+The jitter geom is a convenient default for geom_point with position = 'jitter'. It's a useful way of handling overplotting caused by discreteness in smaller datasets.
+
+##Aesthetics
+`geom_point` understands the following aesthetics (required aesthetics are in bold):
+```
+x
+y
+alpha
+colour
+fill
+shape
+size
+stroke
+```
+##Examples
+```{r}
+library(ggplot2)
+p <- ggplot(mpg, aes(cyl, hwy))
+p + geom_point(size = 1) + 
+  geom_jitter(aes(colour = class),size = 2,alpha = 0.5) + 
+  geom_jitter(colour= "blue",width = 0.25, height = 0.5,alpha = 0.3,shape = 17,size = 2)
+```
+         

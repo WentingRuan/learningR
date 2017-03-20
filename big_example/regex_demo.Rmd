@@ -1,0 +1,147 @@
+---
+title: "regex_examples"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Regular Expression Pattern
+
+```{r}
+text <- c("123456789ca@b.com a@qq.com", "123acb@qq.com")
+
+# "?:" means do not capture ".com""
+rex <- "([a-z]+)@([acb]|qq)+.(?:com)"
+
+```
+
+##Pattern Matching and Replacement
+###regexpr 
+search for matches to argument pattern within each element of a character vector
+```{r}
+
+#capture only the first qualified token in each vector
+regexpr(rex,c("123456789ca@b.com a@qq.com", "123acb@qq.com"))
+```
+
+###gregexpr 
+```{r}
+
+#capture all the qualified tokens
+gregexpr(rex,c("123456789ca@b.com a@qq.com", "123acb@qq.com")) 
+
+```
+
+###regmatches
+```{r}
+
+#extract or replace matched substrings
+regmatches(c("123456789ca@b.com a@qq.com", "123acb@qq.com"), gregexpr(rex, c("123456789ca@b.com a@qq.com", "123acb@qq.com")))
+
+```
+
+###regexec
+```{r}
+
+#extract the exact matched parts of patten in the text
+regexec(rex,c("123456789ca@b.com a@qq.com", "123acb@qq.com")) 
+
+```
+
+
+##gregexpr_matches 
+##regexec_matches
+
+```{r}
+
+gregexpr_matches <- function(pattern, text){ regmatches(text, gregexpr(pattern, text))}
+regexec_matches <- function(pattern, text){ regmatches(text, regexec(pattern, text))}
+
+#split the functions and analyze them
+gregexpr(rex, text)
+a0 <- regmatches(text, gregexpr(rex, text))
+regexec(rex, a0[[1]])
+regmatches(a0[[1]], regexec(rex,a0[[1]]))
+
+```
+
+###gregexpr_matches 
+```{r}
+gregexpr_matches(rex, text)
+
+```
+
+###regexec_match vector1 
+```{r}
+a1<-gregexpr_matches(rex, text)[[1]]
+a1
+regexec_matches(rex, a1)
+
+```
+
+###regexec_match vector2
+```{r}
+
+a2<-gregexpr_matches(rex, text)[[2]]
+a2 
+regexec_matches(rex,a2)
+```
+
+##substring str
+```{r}
+
+res <- gregexpr(rex,text)
+res
+
+b1<- res[[1]][1]
+b1
+
+b2<- attr(res[[1]], "match.length")[1]
+b2
+
+```
+
+###substring vector1-1
+```{r}
+text
+
+substring(text[1], b1, b1+b2-1)
+
+substr(text[1], b1, b1+b2-1)
+
+```
+
+###substring vector1-2
+```{r}
+b3 <- res[[1]][2]
+b3
+b4 <- attr(res[[1]],"match.length")[2]
+b4
+substring(text[1], b3, b3+b4-1)
+
+substr(text[1], b3, b3+b4-1)
+```
+
+##substring vector2
+```{r}
+substring(text[2], res[[2]][1], res[[2]][1]+attr(res[[2]], "match.length")[1])
+
+regmatches
+a3 <- substring(text[2], res[[2]][1], res[[2]][1]+attr(res[[2]], "match.length")[1])
+regmatches(a3,regexec(rex,a3))
+
+```
+
+```{r}
+
+ sub("[a-z]{3,5}", 123, c("abcde123abc"))
+
+ gsub("[a-z]{3,5}", 123, c("abcde123abc"))
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

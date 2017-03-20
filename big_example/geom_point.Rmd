@@ -1,0 +1,59 @@
+---
+title: "geom_point"
+author: "Ethel Ruan"
+date: "2017-01-20"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#geom_point
+`geom_point`
+**Points, as for a scatterplot**
+          
+
+##Usage
+
+```
+geom_point(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+##Description
+
+The point geom is used to create scatterplots.
+
+##Aesthetics
+
+`geom_point` understands the following aesthetics (required aesthetics are in bold):
+
+```
+x
+y
+alpha
+colour
+fill
+shape
+size
+stroke
+```
+
+##Example
+```{r}
+library(ggplot2)
+p <- ggplot(mtcars, aes(wt, mpg))
+ p + geom_point(aes(colour = cyl, shape = factor(cyl)),size = 5) + scale_colour_gradient(low = "blue") +
+    scale_shape(solid = FALSE)
+```
+           
+
+```{r}
+p + geom_point(aes(
+  colour = factor(cyl),
+  shape = factor(cyl),
+  size = qsec
+))
+```
+         

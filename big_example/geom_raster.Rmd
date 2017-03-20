@@ -1,0 +1,106 @@
+---
+title: "geom_raster"
+author: "Ethel Ruan"
+date: "2017-01-20"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#geom_raster
+`geom_raster`(geom_rect, geom_tile)
+**Draw rectangles.**
+          
+
+##Usage
+```
+geom_raster(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., hjust = 0.5, vjust = 0.5, interpolate = FALSE, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+geom_rect(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+geom_tile(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+##Description
+
+`geom_rect` and `geom_tile` do the same thing, but are parameterised differently. 
+`geom_rect` uses the locations of the four corners (xmin, xmax, ymin and ymax). 
+`geom_tile` uses the center of the tile and its size (x, y, width, height). 
+`geom_raster` is a high performance special case for when all the tiles are the same size.
+
+##Aesthetics
+
+`geom_tile` understands the following aesthetics (required aesthetics are in bold):
+```
+    x
+    y
+    alpha
+    colour
+    fill
+    linetype
+    size
+```
+##Examples
+```{r}
+library(ggplot2)
+ # The most common use for rectangles is to draw a surface. You always want
+ # to use geom_raster here because it's so much faster, and produces
+ # smaller output when saving to PDF
+ggplot(faithfuld, aes(waiting, eruptions)) +
+ geom_raster(aes(fill = density))
+
+```
+       
+```{r}
+ # Interpolation smooths the surface & is most helpful when rendering  s.
+ggplot(faithfuld, aes(waiting, eruptions)) +
+ geom_raster(aes(fill = density), interpolate = TRUE)
+ ```
+         
+```{r}
+
+ # If you want to draw arbitrary rectangles, use geom_tile() or geom_rect()
+df <- data.frame(
+  x = rep(c(2, 5, 7, 9, 12), 2),
+  y = rep(c(1, 2), each = 5),
+  z = factor(rep(1:5, each = 2)),
+  w = rep(diff(c(0, 4, 6, 8, 10, 14)), 2)
+)
+ggplot(df, aes(x, y)) +
+  geom_tile(aes(fill = z))
+```
+         
+```{r}
+ggplot(df, aes(x, y)) +
+  geom_tile(aes(fill = z, width = w), colour = "grey50")
+```
+        
+
+```{r}
+ggplot(df, aes(xmin = x - w / 2, xmax = x + w / 2, ymin = y, ymax = y + 1)) +
+  geom_rect(aes(fill = z, width = w), colour = "grey50")
+```
+      -13k  
+
+```{r}
+# Justification controls where the cells are anchored
+df <- expand.grid(x = 0:5, y = 0:5)
+df$z <- runif(nrow(df))
+# default is compatible with geom_tile()
+ggplot(df, aes(x, y, fill = z)) + geom_raster()
+
+
+# zero padding
+ggplot(df, aes(x, y, fill = z)) + geom_raster(hjust = 0, vjust = 0)
+```
+         
+
+```{r}
+# Inspired by the  -density plots of Ken Knoblauch
+cars <- ggplot(mtcars, aes(mpg, factor(cyl)))
+cars + stat_density(aes(fill = ..density..), geom = "raster", position = "identity")
+```
+       

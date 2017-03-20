@@ -1,0 +1,87 @@
+---
+title: "geom_path"
+author: "Ethel Ruan"
+date: "2017-01-20"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#geom_path
+`geom_path`(geom_line, geom_step)
+**Connect observations.**
+          
+
+##Usage
+```
+geom_path(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., lineend = "butt", linejoin = "round", linemitre = 1, arrow = NULL, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+geom_line(mapping = NULL, data = NULL, stat = "identity", position = "identity", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
+
+geom_step(mapping = NULL, data = NULL, stat = "identity", position = "identity", direction = "hv", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
+```
+
+##Description
+`geom_path()` connects the observations in the order in which they appear in the data. 
+`geom_line()` connects them in order of the variable on the x axis.
+`geom_step()` creates a stairstep plot, highlighting exactly when changes occur.
+
+##Aesthetics
+`geom_path` understands the following aesthetics (required aesthetics are in bold):
+
+```
+x
+y
+alpha
+colour
+linetype
+size
+```
+
+##Examples
+```{r}
+library(ggplot2)
+  ggplot(economics, aes(date, unemploy)) +
+  geom_line(colour = "red",arrow = arrow(angle = 15, ends = "both", type = "closed")) +
+  geom_path(
+    aes(colour = as.numeric(date)),
+    alpha = 0.5,
+    size = 10,
+    lineend = "round",
+    linejoin = "mitre"
+  ) 
+  
+```
+        
+
+```{r}
+m <- ggplot(economics, aes(unemploy/pop, psavert))
+m + geom_path(aes(colour = as.numeric(date))) + geom_step(alpha = 0.5,colour = "pink",linetype = 2)
+
+```
+         
+
+```{r}
+recent <- economics[economics$date > as.Date("2013-01-01"),]
+ggplot(recent, aes(date, unemploy)) + geom_line() + geom_step(colour = "red")
+```
+         
+
+```{r}
+ # Setting line type vs colour/size
+ # Line type needs to be applied to a line as a whole, so it can
+ # not be used with colour or size that vary across a line
+x <- seq(0.01, .99, length.out = 100)
+df <- data.frame(
+  x = rep(x, 2),
+  y = c(qlogis(x), 2 * qlogis(x)),
+  group = rep(c("a","b"),
+  each = 100)
+)
+ ggplot(df, aes(x=x, y=y, group=group)) + geom_line(aes(colour = group), linetype = 2)
+```
+          

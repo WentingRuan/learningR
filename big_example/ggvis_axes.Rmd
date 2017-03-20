@@ -1,0 +1,134 @@
+---
+title: "Axes and Legends"
+author: "Ethel Ruan"
+date: "2017-02-11"
+output: 
+  html_document: 
+    keep_md: yes
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Axes and Legends
+
+When polishing graphics for production you often spend a lot of time getting the axes and legends looking exactly right. This vignette describes the ggvis functions that allow you to control plot guides: `axes` and `legends`.
+
+In ggvis, axes and legends are related to `scales`, but are described separately. This is different to ggplot2, where the scale objects controlled both the details of the mapping and how it should be displayed on the plot. This makes ggvis a little more verbose, but it also makes it more flexible.
+
+Currently, ggvis guides are a close map to their vega equivalents. For reference, you may also want to read the vega documentation for the underlying `axis` and `legend` components.
+
+# Common properties
+
+Axes and legends have relatively few components in common, but the ones that they share are particularly important.
+
+##scale 
+
+scale(axis), and stroke/fill/size/shape (legend) describe which scale (or scales in the case of a legend) will be displayed on the guide
+```
+    add_axis(vis, "x")
+    add_axis(vis, "y")
+    add_legend(vis, "stroke")
+    add_legend(vis, "size")
+    # Display multiple scales in one legend:
+    add_legend(vis, "stroke", "size")
+```
+## title
+
+title,a string describing the guide
+```
+    add_axis(vis, "x", title = "My x variable")
+    add_legend(vis, "fill", title = "Some interesting colours")
+```
+## values
+
+value, used to override the default placement of ticks on an axis or gradient legend, or visible legend labels.
+
+## format
+
+format,a d3 **formatting specification** that controls how values are converted to strings.
+
+# Custom styles
+
+Finally, both axes and legends share `properties`, which is a named list of `props()` that is applied to specified components of the axis or legend. For axes, you can set the properties of the ticks (or majorTicks and minorTicks separately), the labels and axis. For legends, you can set properties of the title, label, symbols (for categorical scales), gradient (for continuous scales), and legend.
+
+```{r}
+library(ggvis)
+mtcars %>% ggvis(~wt, ~mpg) %>%
+  layer_points() %>%
+  add_axis("x", properties = axis_props(
+    axis = list(stroke = "red", strokeWidth = 5),
+    grid = list(stroke = "blue"),
+    ticks = list(stroke = "blue", strokeWidth = 2),
+    labels = list(angle = 45, align = "left", fontSize = 20)
+  ))
+```
+
+
+# Axis
+
+```{r}
+mtcars %>% ggvis(~wt, ~mpg) %>% layer_points()
+```
+
+```{r}
+##   add title to axis
+##  add offset to push titles further
+##  control orient
+##  You can even put multiple scales on one side:
+
+mtcars %>% ggvis(~wt, ~mpg) %>%
+  layer_points() %>%
+  add_axis("x", orient = "bottom",title = "top wt",title_offset = 30) %>%
+  add_axis("x", orient = "top",title = "bottom wt",title_offset = 40) %>% 
+  add_axis("y",orient ="left" ,title = "left mpg",title_offset = 50) %>%
+  add_axis("y",orient = "right",title = "right mpg",title_offset = 60,grid = FALSE) %>%
+  add_axis("x",title = "mpg~2",title_offset = 30,offset = 60,grid = FALSE)
+ 
+```
+
+
+This is probably more useful if you have multiple x or y position scales, but I’ve already discussed that enough times in these vignettes given how much I dislike them.
+
+# Tick sizes and padding
+
+There are five options that control the appearance of ticks:
+
+ - `subdivide`: the number of minor ticks between each major tick.
+
+ - `tick_padding`: the padding between ticks and labels (in pixels)
+
+ - `tick_size_major`, `tick_size_minor` ,`tick_size_end`: the size of the major, minor and end ticks. By default they are all the same size as the major ticks, but you can set them separately.
+```{r}
+# Change ticks and subdivide with minor ticks
+# Make the minor ticks smaller and the end ticks longer
+
+mtcars %>% ggvis(~wt, ~mpg) %>%
+layer_points() %>%
+add_axis("x", subdivide = 9, values = 1:6, tick_size_major = 20,
+tick_size_minor = 5, tick_size_end = 35, tick_padding = 20) %>%
+add_axis("y", subdivide = 1, values = seq(10, 34, by = 2))
+
+```
+
+# Legends
+
+Combining legends
+
+Unlike ggplot2, by default, ggvis will not combine scales based on the same underlying variables into a single legend. Instead you must do this yourself by supplying the name of multiple scales to one legend:
+
+```{r}
+
+mtcars2 <- mtcars %>% dplyr::mutate(cyl = ordered(mtcars$cyl))
+mtcars2 %>% ggvis(~mpg, ~wt, size = ~cyl, fill = ~cyl) %>% layer_points()
+```
+
+```{r}
+mtcars2 %>% ggvis(~mpg, ~wt, size = ~cyl, fill = ~cyl) %>% layer_points() %>%
+  add_legend(c("size", "fill"))
+```
+
+
+ 

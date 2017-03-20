@@ -1,0 +1,54 @@
+---
+title: "geom_rug"
+author: "Ethel Ruan"
+date: '2017-01-20'
+output:
+  html_document:
+    keep_md: yes
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#geom_rug
+ `geom_rug` 
+**Marginal rug plots.**
+
+##Usage
+```
+geom_rug(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., sides = "bl", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+##Description
+
+Marginal rug plots.
+
+##Aesthetics
+
+`geom_rug` understands the following aesthetics (required aesthetics are in bold):
+```
+    alpha
+    colour
+    linetype
+    size
+```
+##Examples
+```{r}
+library(ggplot2)
+p <- ggplot(mtcars, aes(wt, mpg))
+p + geom_point() + geom_rug()
+```
+        
+
+```{r}
+
+
+p + geom_point() +
+  geom_rug() +
+  geom_rug(sides = "b",colour= "red") +   # Rug on bottom only
+  geom_rug(sides = "trbl",colour = "blue") + # All four sides
+  geom_rug(position = 'jitter',colour = "yellow")
+
+```
+        

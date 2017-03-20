@@ -1,0 +1,60 @@
+---
+title: "geom_quantile"
+author: "Ethel Ruan"
+date: "2017-01-20"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#geom_quantile
+`geom_quantile`(stat_quantile)
+**Add quantile lines from a quantile regression.**
+         
+
+##Usage
+```
+geom_quantile(mapping = NULL, data = NULL, stat = "quantile", position = "identity", ..., lineend = "butt", linejoin = "round", linemitre = 1, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+stat_quantile(mapping = NULL, data = NULL, geom = "quantile", position = "identity", ..., quantiles = c(0.25, 0.5, 0.75), formula = NULL, method = "rq", method.args = list(), na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+
+##Description
+This can be used as a continuous analogue of a geom_boxplot.
+
+##Aesthetics
+`geom_quantile` understands the following aesthetics (required aesthetics are in bold):
+```
+x
+y
+alpha
+colour
+linetype
+size
+weight
+```
+
+##Computed variables
+quantile
+quantile of distribution
+
+##Examples
+```{r}
+library(ggplot2)
+q10 <- seq(0.05, 0.95, by = 0.05)
+m <- ggplot(mpg, aes(displ, 1 / hwy)) + geom_point()
+m + geom_quantile() +
+  geom_quantile(
+    quantiles = 0.5,
+    colour = "red",
+    alpha = 0.5,
+    size = 3
+  ) +
+  geom_quantile(quantiles = q10,colour = "grey",alpha = 0.5,size =2) +
+  geom_quantile(method = "rqss",colour = "green") +
+  geom_quantile(method = "rqss", lambda = 0.1,colour = "pink",size = 1)
+```

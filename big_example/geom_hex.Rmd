@@ -1,0 +1,78 @@
+---
+title: "geom_hex"
+author: "Ethel Ruan"
+date: "2017-01-24"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#geom_hex
+`geom_hex`(stat_bin_hex, stat_binhex)
+**Hexagon binning.**
+
+##Usage
+```
+geom_hex(mapping = NULL, data = NULL, stat = "binhex", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+stat_bin_hex(mapping = NULL, data = NULL, geom = "hex", position = "identity", ..., bins = 30, binwidth = NULL, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+
+##Description
+Hexagon binning.
+
+##Aesthetics
+`geom_hex` understands the following aesthetics (required aesthetics are in bold):
+```
+    x
+    y
+    alpha
+    colour
+    fill
+    size
+```
+Examples
+```{r}
+library(ggplot2)
+library(hexbin)
+
+d <- ggplot(diamonds, aes(carat, price))
+d + geom_hex(alpha= 0.1) +
+  geom_hex(bins = 10,fill = "red",alpha = 0.1) + 
+  geom_hex(bins = 30,fill= "blue",alpha = 0.1)
+```
+install.packages("hexbin") failed
+
+```{r}
+d <- ggplot(diamonds, aes(carat, price))
+d + geom_hex()
+```
+         
+
+```{r}
+# You can control the size of the bins by specifying the number of
+# bins in each direction:
+d + geom_hex(bins = 10)
+```
+         
+
+```{r}
+d + geom_hex(bins = 30)
+```
+     
+
+```{r}
+# Or by specifying the width of the bins
+d + geom_hex(binwidth = c(1, 1000))
+```
+        
+
+
+```{r}
+d + geom_hex(binwidth = c(.1, 500))
+```
+          

@@ -1,0 +1,87 @@
+---
+title: "geom_violin"
+author: "Ethel Ruan"
+date: "2017-01-20"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+#geom_violin
+`geom_violin`(stat_ydensity) 
+**Violin plot.**
+        
+
+##Usage
+```
+geom_violin(mapping = NULL, data = NULL, stat = "ydensity", position = "dodge", ..., draw_quantiles = NULL, trim = TRUE, scale = "area", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+stat_ydensity(mapping = NULL, data = NULL, geom = "violin", position = "dodge", ..., bw = " ", adjust = 1, kernel = "gaussian", trim = TRUE, scale = "area", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+##Aesthetics
+
+`geom_violin` understands the following aesthetics (required aesthetics are in bold):
+```
+    x
+    y
+    alpha
+    colour
+    fill
+    linetype
+    size
+    weight
+```
+##Computed variables
+
+density
+    density estimate
+
+scaled
+    density estimate, scaled to maximum of 1
+
+count
+    density * number of points - probably useless for violin plots
+
+violinwidth
+    density scaled for the violin plot, according to area, counts or to a constant maximum width
+
+n
+    number of points
+
+width
+    width of violin bounding box
+
+##References
+
+Hintze, J. L., Nelson, R. D. (1998) Violin Plots: A Box Plot-Density Trace Synergism. The American Statistician 52, 181 
+
+##Examples
+```{r}
+library(ggplot2)
+library(ggplot2movies)
+# Scales vs. coordinate transforms -------
+if (require("ggplot2movies")) {
+# Scale transformations occur before the density statistics are computed.
+# Coordinate transformations occur afterwards.  Observe the effect on the
+# number of outliers.
+m <- ggplot(movies, aes(y = votes, x = rating, group = cut_width(rating, 0.5)))
+m + geom_violin()
+m + geom_violin() + scale_y_log10()
+m + geom_violin() + coord_trans(y = "log10")
+m + geom_violin() + scale_y_log10() + coord_trans(y = "log10")
+
+# Violin plots with continuous x:
+# Use the group aesthetic to group observations in violins
+ggplot(movies, aes(year, budget)) + geom_violin()
+ggplot(movies, aes(year, budget)) +
+  geom_violin(aes(group = cut_width(year, 10)), scale = "width")
+}
+
+```
+       
+

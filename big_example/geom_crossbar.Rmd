@@ -1,0 +1,65 @@
+---
+title: "geom_crossbar"
+author: "Ethel Ruan"
+date: "2017-01-19"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+**Vertical intervals: lines, crossbars & errorbars.**
+    
+##Usage
+```
+geom_crossbar(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., fatten = 2.5, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+geom_errorbar(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+geom_linerange(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+geom_pointrange(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., fatten = 4, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+
+##Examples
+```{r,echo = FALSE}
+library(ggplot2)
+```
+          
+
+```{r}
+df <- data.frame(
+  trt = factor(c(1, 1, 2, 2)),
+  resp = c(1, 5, 3, 4),
+  group = factor(c(1, 2, 1, 2)),
+  upper = c(1.1, 5.3, 3.3, 4.2),
+  lower = c(0.8, 4.6, 2.4, 3.6)
+)
+
+p <- ggplot(df, aes(trt, resp, colour = group))
+p + geom_linerange(aes(ymin = lower, ymax = upper),size = 2) + 
+  geom_pointrange(aes(ymin = lower, ymax = upper),size = 2) 
+
+
+p + geom_crossbar(aes(ymin = lower, ymax = upper), width = 0.5,size = 1,alpha = 0.1) + 
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2,color = "black",size = 1) +
+  geom_line(aes(group = group))
+
+
+p2 <- ggplot(df, aes(trt, resp, fill = group))
+dodge <- position_dodge(width=0.9)
+p2 +
+  geom_bar(position = dodge, stat = "identity") +
+  geom_errorbar(aes(ymin = lower, ymax = upper), position = dodge, width = 0.25)
+```
+        
+
+##See also
+
+`stat_summary` for examples of these guys in use,
+`geom_smooth` for continuous analog
+

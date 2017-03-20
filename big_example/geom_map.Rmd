@@ -1,0 +1,75 @@
+---
+title: "geom_map"
+author: "Ethel Ruan"
+date: "2017-01-20"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#geom_map
+`geom_map`
+**Polygons from a reference map.**
+
+##Usage
+```
+geom_map(mapping = NULL, data = NULL, stat = "identity", ..., map, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+##Description
+Does not affect position scales.
+
+##Aesthetics
+`geom_map` understands the following aesthetics (required aesthetics are in bold):
+```
+map_id
+alpha
+colour
+fill
+linetype
+size
+```
+##Examples
+```{r}
+ids <- factor(c("1.1", "2.1", "1.2", "2.2", "1.3", "2.3"))
+
+values <- data.frame(
+  id = ids,
+  value = c(3, 3.1, 3.1, 3.2, 3.15, 3.5)
+)
+
+positions <- data.frame(
+  id = rep(ids, each = 4),
+  x = c(2, 1, 1.1, 2.2, 1, 0, 0.3, 1.1, 2.2, 1.1, 1.2, 2.5, 1.1, 0.3,
+        0.5, 1.2, 2.5, 1.2, 1.3, 2.7, 1.2, 0.5, 0.6, 1.3),
+  y = c(-0.5, 0, 1, 0.5, 0, 0.5, 1.5, 1, 0.5, 1, 2.1, 1.7, 1, 1.5,
+        2.2, 2.1, 1.7, 2.1, 3.2, 2.8, 2.1, 2.2, 3.3, 3.2)
+)
+library(ggplot2)
+ggplot(values, aes(fill = value)) +
+  geom_map(aes(map_id = id), map = positions) +
+  expand_limits(positions,alpha = 0.5) + ylim(-1,5)
+```
+         
+
+```{r}
+crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
+crimesm <-reshape2::melt(crimes, id = 1)
+library("maps")
+if (require(maps)) {
+  states_map <- map_data("state")
+  ggplot(crimes, aes(map_id = state)) +
+    geom_map(aes(fill = Murder), map = states_map) +
+    expand_limits(x = states_map$long, y = states_map$lat)
+
+  last_plot() + coord_map()
+  ggplot(crimesm, aes(map_id = state)) +
+    geom_map(aes(fill = value), map = states_map) +
+    expand_limits(x = states_map$long, y = states_map$lat) +
+    facet_wrap( ~ variable)
+}
+```
+          

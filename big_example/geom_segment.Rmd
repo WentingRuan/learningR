@@ -1,0 +1,82 @@
+---
+title: "geom_segment"
+author: "Ethel Ruan"
+date: "2017-01-20"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#geom_segment
+`geom_segment`(geom_curve) 
+**Line segments and curves.**
+        
+
+##Usage
+```
+geom_segment(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., arrow = NULL, lineend = "butt", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+geom_curve(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., curvature = 0.5, angle = 90, ncp = 5, arrow = NULL, lineend = "butt", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+
+##Description
+
+`geom_segment` draws a straight line between points ( x1,y1  ) and ( x2,y2  ). `geom_curve` draws a curved line.
+
+##Aesthetics
+
+`geom_segment` understands the following aesthetics (required aesthetics are in bold):
+```
+    x
+    xend
+    y
+    yend
+    alpha
+    colour
+    linetype
+    size
+```
+##Examples
+```{r}
+library(ggplot2)
+
+b <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+
+df <- data.frame(x1 = 2.62, x2 = 3.57, y1 = 21.0, y2 = 15.0)
+b +
+  geom_curve(aes(x = x1, y = y1, xend = x2, yend = y2, colour = "curve"), data = df,colour= "red") +
+  geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2, colour = "segment"), data = df,colour = "blue") +
+  geom_curve(aes(x = x1, y = y1, xend = x2, yend = y2), data = df, curvature = -0.2,colour = "green") + 
+  geom_curve(aes(x = x1, y = y1, xend = x2, yend = y2), data = df, curvature = 1,colour= "black")+
+  geom_curve(
+  aes(x = x1, y = y1, xend = x2, yend = y2),
+  data = df,
+  arrow = arrow(length = unit(0.03, "npc")),colour = "pink"
+)
+
+```
+         
+
+```{r}
+ggplot(seals, aes(long, lat)) +
+  geom_segment(aes(xend = long + delta_long, yend = lat + delta_lat),
+    arrow = arrow(length = unit(0.1,"cm"))) +
+  borders("state")
+```
+       
+```{r}
+# You can also use geom_segment to recreate plot(type = "h") :
+counts <- as.data.frame(table(x = rpois(100,5)))
+counts$x <- as.numeric(as.character(counts$x))
+with(counts, plot(x, Freq, type = "h", lwd = 10))
+```
+        
+```{r}
+ggplot(counts, aes(x, Freq)) +
+  geom_segment(aes(xend = x, yend = 0), size = 10, lineend = "butt")
+```
+          

@@ -1,0 +1,79 @@
+---
+title: "geom_density_2d"
+author: "Ethel Ruan"
+date: "2017-01-19"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#geom_density_2d
+`geom_density_2d` (geom_ d, stat_ d, stat_density_2d)
+**Contours from a 2d density estimate.**
+        
+
+##Usage
+```
+geom_density_2d(mapping = NULL, data = NULL, stat = " d", position = "identity", ..., lineend = "butt", linejoin = "round", linemitre = 1, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+stat_density_2d(mapping = NULL, data = NULL, geom = "density_2d", position = "identity", ..., contour = TRUE, n = 100, h = NULL, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+
+##Description
+Perform a 2D kernel density estimation using  d and display the results with contours. This can be useful for dealing with overplotting.
+
+##Aesthetics
+`geom_density_2d` understands the following aesthetics (required aesthetics are in bold):
+```
+    x
+    y
+    alpha
+    colour
+    linetype
+    size
+```
+##Computed variables
+
+Same as stat_contour
+
+##Examples
+```{r}
+library(ggplot2)
+m <- ggplot(faithful, aes(x = eruptions, y = waiting)) +
+ geom_point() +
+ xlim(0.5, 6) +
+ ylim(40, 110)
+m + geom_density_2d()
+```
+         
+
+```{r}
+m + stat_density_2d(aes(fill = ..level..), geom = "polygon")
+```
+        
+
+```{r}
+set.seed(4393)
+dsmall <- diamonds[sample(nrow(diamonds), 1000), ]
+d <- ggplot(dsmall, aes(x, y))
+# If you map an aesthetic to a categorical variable, you will get a
+# set of contours for each value of that variable
+d + geom_density_2d(aes(colour = cut))
+```
+          
+
+```{r}
+# If we turn contouring off, we can use use geoms like tiles:
+d + stat_density_2d(geom = "raster", aes(fill = ..density..), contour = FALSE)
+```
+          
+
+```{r}
+# Or points:
+d + stat_density_2d(geom = "point", aes(size = ..density..), n = 20, contour = FALSE)
+```
+        

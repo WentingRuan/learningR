@@ -1,0 +1,52 @@
+---
+title: "geom_count"
+author: "Ethel Ruan"
+date: "2017-01-19"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+**Count the number of observations at each location.**
+
+##Usage
+
+```
+geom_count(mapping = NULL, data = NULL, stat = "sum", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+stat_sum(mapping = NULL, data = NULL, geom = "point", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+
+##Examples
+
+```{r,echo = FALSE}
+library(ggplot2)
+
+```
+         
+
+```{r}
+ggplot(mpg, aes(cty, hwy)) +
+  geom_point(colour = "blue") + geom_count(colour = "pink")
+
+
+d <- ggplot(diamonds, aes(x = cut, y = clarity ))
+
+d + geom_count(aes(size = ..prop..),colour = "grey", alpha = 0.2) + 
+  scale_radius() +
+  geom_count(aes(size = ..prop.., group = 1),colour = "blue",alpha = 0.5) + 
+  scale_size(guide = "legend")
+
+d + geom_count(aes(size = ..prop.., colour = depth)) +
+  scale_size_area(max_size = 10, guide = "legend")
+
+d + geom_count(aes(size = ..prop.., group = cut),colour = "red",show.legend = TRUE,position = "identity") +
+  scale_size_area(max_size = 5, trans = "identity")
+
+```
+          

@@ -1,0 +1,57 @@
+---
+title: "geom_density"
+author: "Ethel Ruan"
+date: "2017-01-19"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+**Display a smooth density estimate.**
+       
+##Usage
+```
+geom_density(mapping = NULL, data = NULL, stat = "density", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+stat_density(mapping = NULL, data = NULL, geom = "area", position = "stack", ..., bw = " ", adjust = 1, kernel = "gaussian", trim = FALSE, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+
+
+
+##Examples
+```{r, echo = FALSE}
+library(ggplot2)
+
+```
+        
+
+```{r}
+ggplot(diamonds, aes(carat)) +
+  geom_density(colour = "red") +
+  geom_density(adjust = 1 / 5) + 
+  geom_density(adjust = 5, colour = "blue")
+
+ggplot(diamonds, aes(depth, fill = cut, colour = cut)) +
+  geom_density(alpha = 0.1) +
+  xlim(55, 70)
+
+ggplot(diamonds, aes(carat, fill = cut)) +
+  geom_density(position = "stack") 
+
+ggplot(diamonds, aes(carat, ..count.., fill = cut)) +
+  geom_density(position = "stack",alpha = 0.1) 
+
+ggplot(diamonds, aes(carat, ..count.., fill = cut)) +
+  geom_density(position = "fill")
+```
+         
+
+##See also
+
+`geom_histogram`,`geom_freqpoly`  for other methods of displaying continuous distribution. 
+See `geom_violin` for a compact density display.

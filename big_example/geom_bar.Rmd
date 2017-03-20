@@ -1,0 +1,63 @@
+---
+title: "geom_bar"
+author: "Ethel Ruan"
+date: "2017-01-19"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```r
+library(ggplot2)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+**Bars, rectangles with bases on x-axis**
+
+
+##Usage
+```
+geom_bar(mapping = NULL, data = NULL, stat = "count", position = "stack", ..., width = NULL, binwidth = NULL, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+stat_count(mapping = NULL, data = NULL, geom = "bar", position = "stack", ..., width = NULL, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+
+##Examples
+
+```{r}
+reorder_size <- function(x) {
+  factor(x, levels = names(sort(table(x))))
+}
+
+ggplot(mpg, aes(reorder_size(class))) + geom_bar(fill = "blue",alpha = 0.1)
+
+ggplot(mpg, aes(class)) +
+  geom_bar(aes(fill = drv), position = "dodge") +
+  geom_bar(aes(weight = displ),alpha = 0.1,fill = "pink")
+
+df <- data.frame(trt = c("a", "b", "c"), outcome = c(2.3, 1.9, 3.2))
+ggplot(df, aes(trt, outcome)) +
+  geom_bar(stat = "identity",fill = "pink") +
+  geom_point(colour = "red")
+
+df <- data.frame(x = rep(c(2.9, 3.1, 4.5), c(5, 10, 4)))
+ggplot(df, aes(x)) + geom_bar(fill = "pink") + geom_histogram(binwidth = 0.5,alpha = 0.2) 
+```
+
+
+##See also
+
+**geom_histogram** for continuous data, 
+
+`position_dodge` for creating side-by-side barcharts. 
+
+`stat_bin`, which bins data in ranges and counts the cases in each range.
+
+It differs from `stat_count`, which counts the number of cases at each x position (without binning into ranges). 
+
+`stat_bin` requires continuous x data, whereas stat_count can be used for both discrete and continuous x data.

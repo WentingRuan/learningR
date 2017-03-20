@@ -1,0 +1,60 @@
+---
+title: "geom_ribbon"
+author: "Ethel Ruan"
+date: "2017-01-20"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#geom_ribbon
+`geom_ribbon`(geom_area) 
+**Ribbons and area plots.**
+         
+
+##Usage
+```
+geom_ribbon(mapping = NULL, data = NULL, stat = "identity", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+geom_area(mapping = NULL, data = NULL, stat = "identity", position = "stack", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
+```
+
+
+##Description
+
+For each continuous x value, `geom_interval` displays a y interval. `geom_area` is a special case of `geom_ribbon`, where the minimum of the range is fixed to 0.
+
+##Details
+
+An area plot is the continuous analog of a stacked bar chart (see geom_bar), and can be used to show how composition of the whole varies over the range of x. Choosing the order in which different components is stacked is very important, as it becomes increasing hard to see the individual pattern as you move up the stack.
+
+##Aesthetics
+
+`geom_ribbon` understands the following aesthetics (required aesthetics are in bold):
+```
+    x
+    ymax
+    ymin
+    alpha
+    colour
+    fill
+    linetype
+    size
+```
+##Examples
+```{r}
+library(ggplot2)
+# Generate data
+huron <- data.frame(year = 1875:1972, level = as.vector(LakeHuron))
+h <- ggplot(huron, aes(year))
+# Add aesthetic mappings
+h +
+  geom_ribbon(aes(ymin = level - 1, ymax = level + 1), fill = "grey70") +
+  geom_line(aes(y = level))
+```
+
+         

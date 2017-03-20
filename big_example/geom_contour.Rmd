@@ -1,0 +1,49 @@
+---
+title: "geom_contour"
+author: "Ethel Ruan"
+date: "2017-01-20"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Display contours of a 3d surface in 2d.**
+        
+
+##Usage
+```
+geom_contour(mapping = NULL, data = NULL, stat = "contour", position = "identity", ..., lineend = "butt", linejoin = "round", linemitre = 1, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+
+stat_contour(mapping = NULL, data = NULL, geom = "contour", position = "identity", ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+```
+
+
+##Examples
+
+```{r,echo = FALSE}
+library(ggplot2)
+```
+
+```{r}
+v <- ggplot(faithfuld, aes(waiting, eruptions, z = density))
+v +  geom_contour(colour = "red",binwidth = 0.005,bins = 20,alpha = 0.2) + 
+  geom_contour(aes(colour = ..level..),bins = 10) + 
+  stat_contour(colour = "green",alpha = 0.2,binwidth = 0.001)
+
+ggplot(faithful, aes(waiting, eruptions)) +
+  geom_density_2d()
+
+v + geom_raster(aes(fill = density)) +
+  geom_contour(colour = "white") 
+  
+
+```
+        
+
+##See also
+
+`geom_density_2d` : 2d density contours
